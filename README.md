@@ -126,7 +126,7 @@ aws eks update-kubeconfig --region us-east-1 --name my-eks
 ![image](https://github.com/user-attachments/assets/d9efaa68-5b25-448a-9550-7ee826ad3b12)
 
 
-### 5. Run the following command to create a Kubernetes secret that stores your ECR credentials
+### 5. Create Kubernetes Secret for ECR
 ```bash
 kubectl create secret docker-registry ecr-registry-secret \
   --docker-server=135808945423.dkr.ecr.us-east-1.amazonaws.com \
@@ -136,8 +136,7 @@ kubectl create secret docker-registry ecr-registry-secret \
 
 
 ### 6. Configure GitHub Actions
-1- Create a new self runner  folw the below steps:
-**From Settings> action > runners**
+  1. Create a new self-hosted runner from **Settings > Actions > Runners**.
 ![image](https://github.com/user-attachments/assets/51064f07-09cb-4d1e-9d7d-aa2a4714057a)
 
 ![image](https://github.com/user-attachments/assets/b9d69e84-b37d-4a93-882d-5bd11ad3e52f)
@@ -145,13 +144,13 @@ kubectl create secret docker-registry ecr-registry-secret \
 ![image](https://github.com/user-attachments/assets/adb8f41d-ba5c-48e1-a089-8fa508183a8f)
 
 ![image](https://github.com/user-attachments/assets/d7b37f19-e253-4ef7-bb5b-a489a1a4cea5)
-
-2- Update **secrets** in GitHub repository settings:
-  - `AWS_ACCESS_KEY_ID`
-  - `AWS_SECRET_ACCESS_KEY`
-  - `AWS_REGION`
-  - `ECR_REPOSITORY`
-  - 
+  
+  2- Update **Secrets** in GitHub repository settings:
+    - `AWS_ACCESS_KEY_ID`
+    - `AWS_SECRET_ACCESS_KEY`
+    - `AWS_REGION`
+    - `ECR_REPOSITORY`
+  
 ![image](https://github.com/user-attachments/assets/eb153260-5853-4cb6-94a7-383eacf8277b)
 
 
@@ -166,29 +165,52 @@ git push origin main
 ![image](https://github.com/user-attachments/assets/8b94d282-9e62-404a-8ba8-4d4ac8bb4bd6)
 
 
-### 8. To access the Argocd consol
+### 8. Access ArgoCD Console
 1- change the svc type to LoadBalancer 
 ```bash
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 kubectl get svc -n argocd
 ```
 
-2- To get the Password(Default Username Login: admin)
+To get the initial password: (Default Username Login: admin)
+
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
 ```
 
+### 9. Trigger CD Pipeline and add web-hook 
 3- Run The App of Apps 
 ```bash
 k create -f argocd-app-of-apps.yaml 
 ```
-![image](https://github.com/user-attachments/assets/e31355c9-6bef-4316-b724-2483ee340a35)
 
+![image](https://github.com/user-attachments/assets/7f36f1de-b3fc-48a5-af9e-690045302ced)
+
+
+![image](https://github.com/user-attachments/assets/bcd4961c-7a2f-4de7-9591-524df69df139)
 
 ## Monitoring and Observability
 After deployment, access Prometheus and Grafana:
 - **Prometheus**: `http://<load-balancer-ip>:9090`
-- **Grafana**: `http://<load-balancer-ip>:3000` (Default Login: admin/admin)
+- **Grafana**: `http://<load-balancer-ip>:3000` (Default Username Login: admin)
+
+```bash
+kubectl edit svc prometheus-kube-prometheus-prometheus -n prometheus  # to access the prometheus dashboard
+kubectl edit svc prometheus-grafana -n prometheus      # to access the grafana dashboard 
+```
+
+Retrieve Grafana Default Password:
+```bash
+kubectl get secret prometheus-grafana -n prometheus -o jsonpath="{.data.admin-password}" | base64 -d
+```
+
+### Prometheus Dashboard
+![image](https://github.com/user-attachments/assets/95f71efa-5698-424b-afb9-6fcc685ce2c1)
+
+### Grafana Dashboard
+
+![image](https://github.com/user-attachments/assets/a389239d-e751-4f0c-ba6b-bd9ca662afcf)
+
 
 ## Cleanup
 To remove all deployed resources:
