@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/ziad-tarek/test-repo.git
+    repoURL: https://github.com/ziyad-tarek1/DevOps-EKS-GitOps-ActionFlow.git
     targetRevision: HEAD
     path: argocd-apps
   destination:
