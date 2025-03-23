@@ -128,7 +128,7 @@ aws eks update-kubeconfig --region us-east-1 --name my-eks
 kubectl create secret docker-registry ecr-registry-secret \
   --docker-server=135808945423.dkr.ecr.us-east-1.amazonaws.com \
   --docker-username=AWS \
-  --docker-password=$(aws ecr get-login-password --region us-east-1)```
+  --docker-password=$(aws ecr get-login-password --region us-east-1)
 ```
 
 
