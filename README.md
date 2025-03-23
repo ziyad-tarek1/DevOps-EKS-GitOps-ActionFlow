@@ -123,6 +123,9 @@ terraform apply -auto-approve
 aws eks update-kubeconfig --region us-east-1 --name my-eks
 ```
 
+![image](https://github.com/user-attachments/assets/d9efaa68-5b25-448a-9550-7ee826ad3b12)
+
+
 ### 5. Run the following command to create a Kubernetes secret that stores your ECR credentials
 ```bash
 kubectl create secret docker-registry ecr-registry-secret \
@@ -153,13 +156,34 @@ kubectl create secret docker-registry ecr-registry-secret \
 
 
 
-### 7. Trigger CI/CD Pipeline
+### 7. Trigger CI Pipeline
 Push changes to GitHub and let GitHub Actions handle the deployment:
 ```bash
 git add .
 git commit -m "Deploy application"
 git push origin main
 ```
+![image](https://github.com/user-attachments/assets/8b94d282-9e62-404a-8ba8-4d4ac8bb4bd6)
+
+
+### 8. To access the Argocd consol
+1- change the svc type to LoadBalancer 
+```bash
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl get svc -n argocd
+```
+
+2- To get the Password(Default Username Login: admin)
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
+```
+
+3- Run The App of Apps 
+```bash
+k create -f argocd-app-of-apps.yaml 
+```
+![image](https://github.com/user-attachments/assets/e31355c9-6bef-4316-b724-2483ee340a35)
+
 
 ## Monitoring and Observability
 After deployment, access Prometheus and Grafana:
