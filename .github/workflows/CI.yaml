@@ -34,20 +34,23 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:v2.${{ github.run_number }}
 
 
-      # - name: Update Kubernetes Deployment Manifest
-      #   run: |
-      #     NEW_IMAGE="${{ secrets.ECR_REPOSITORY_URI }}:v2.${{ github.run_number }}"
-      #     echo "Updating deployment manifest with new image: $NEW_IMAGE"
-      #     sed -i "s|\(image: .*:\)v2\.[0-9]*|\1v2.${{ github.run_number }}|g" kubernetes/deployment/deployment-def.yml
-      #     echo "Updated manifest:"
-      #     cat kubernetes/deployment/deployment-def.yml
-      - name: Update Kubernetes Deployment Manifest
+      - name: Debug and Update Kubernetes Deployment Manifest
         run: |
           TAG="v2.${{ github.run_number }}"
           echo "Updating deployment manifest with new image tag: $TAG"
-          sed -i "s|\(image: .*:\)v2\.[0-9]*|\1$TAG|g" kubernetes/deployment/deployment-def.yml
+
+          echo "Before update:"
+          grep "image: " kubernetes/deployment/deployment-def.yml || echo "No image found"
+
+          # Update the image tag
+          sed -i "s|\(image: .*/skyebank:\)v[0-9]*\.[0-9]*|\1$TAG|g" kubernetes/deployment/deployment-def.yml
+
+          echo "After update:"
+          grep "image: " kubernetes/deployment/deployment-def.yml || echo "No image found"
+
           echo "Updated manifest:"
           cat kubernetes/deployment/deployment-def.yml
+
 
 
       - name: Commit and push changes
