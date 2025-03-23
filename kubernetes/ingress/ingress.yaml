@@ -4,11 +4,10 @@ metadata:
   name: skyebank-ingress
   namespace: skyebank
   annotations:
-    # # Instruct Prometheus to scrape this endpoint if metrics are exposed
-    # prometheus.io/scrape: "true"
-    # prometheus.io/port: "80"
-    # # Annotation for NGINX ingress controller to rewrite URLs if needed
-    # nginx.ingress.kubernetes.io/rewrite-target: /
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /health
 spec:
   rules:
     - host: skyebank.example.com
