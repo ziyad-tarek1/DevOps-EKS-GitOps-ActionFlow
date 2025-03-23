@@ -179,9 +179,9 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ```
 
 ### 9. Trigger CD Pipeline and add web-hook 
-3- Run The App of Apps 
+- Run The App of Apps 
 ```bash
-k create -f argocd-app-of-apps.yaml 
+kubectl create -f argocd-app-of-apps.yaml 
 ```
 
 ![image](https://github.com/user-attachments/assets/7f36f1de-b3fc-48a5-af9e-690045302ced)
@@ -231,5 +231,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 For any queries, reach out via:
 - GitHub: [ziyad-tarek1](https://github.com/ziyad-tarek1)
-- Email: ziyadtarek99@example.com
+- Email: ziyadtarek180@gmail.com
 
