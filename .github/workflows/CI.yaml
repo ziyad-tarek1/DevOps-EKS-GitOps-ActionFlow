@@ -34,13 +34,21 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:v2.${{ github.run_number }}
 
 
+      # - name: Update Kubernetes Deployment Manifest
+      #   run: |
+      #     NEW_IMAGE="${{ secrets.ECR_REPOSITORY_URI }}:v2.${{ github.run_number }}"
+      #     echo "Updating deployment manifest with new image: $NEW_IMAGE"
+      #     sed -i "s|\(image: .*:\)v2\.[0-9]*|\1v2.${{ github.run_number }}|g" kubernetes/deployment/deployment-def.yml
+      #     echo "Updated manifest:"
+      #     cat kubernetes/deployment/deployment-def.yml
       - name: Update Kubernetes Deployment Manifest
         run: |
-          NEW_IMAGE="${{ secrets.ECR_REPOSITORY_URI }}:v2.${{ github.run_number }}"
-          echo "Updating deployment manifest with new image: $NEW_IMAGE"
-          sed -i "s|\(image: .*:\)v2\.[0-9]*|\1v2.${{ github.run_number }}|g" kubernetes/deployment/deployment-def.yml
+          TAG="v2.${{ github.run_number }}"
+          echo "Updating deployment manifest with new image tag: $TAG"
+          sed -i "s|\(image: .*:\)v2\.[0-9]*|\1$TAG|g" kubernetes/deployment/deployment-def.yml
           echo "Updated manifest:"
           cat kubernetes/deployment/deployment-def.yml
+
 
       - name: Commit and push changes
         run: |
