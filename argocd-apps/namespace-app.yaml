@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: namespace-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ziad-tarek/test-repo.git
+    targetRevision: HEAD
+    path: kubernetes/namespace
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: skyebank
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

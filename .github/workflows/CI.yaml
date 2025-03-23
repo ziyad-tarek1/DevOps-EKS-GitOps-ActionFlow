@@ -1,0 +1,51 @@
+name: Build, Push & Update Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-update:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+
+      - name: Build, Tag and push Docker image to AWS ECR
+        id: build-push
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY:  skyebank  # ECR_REPOSITORY
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:v2.${{ github.run_number }} app/
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:v2.${{ github.run_number }}
+
+
+      - name: Update Kubernetes Deployment Manifest
+        run: |
+          NEW_IMAGE="${{ secrets.ECR_REPOSITORY_URI }}:v2.${{ github.run_number }}"
+          echo "Updating deployment manifest with new image: $NEW_IMAGE"
+          sed -i "s|\(image: .*:\)v2\.[0-9]*|\1v2.${{ github.run_number }}|g" kubernetes/deployment/deployment-def.yml
+          echo "Updated manifest:"
+          cat kubernetes/deployment/deployment-def.yml
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add kubernetes/deployment/deployment-def.yml
+          git commit -m "Update image tag to v2.${{ github.run_number }}" || echo "No changes to commit"
+          git push

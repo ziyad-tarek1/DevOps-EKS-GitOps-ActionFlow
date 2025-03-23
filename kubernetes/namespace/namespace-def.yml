@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: skyebank
+  labels:
+    environment: production
+    team: skyebank-team
