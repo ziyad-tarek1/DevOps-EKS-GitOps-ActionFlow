@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: skyebank
-        image: 135808945423.dkr.ecr.us-east-1.amazonaws.com/skyebank:v2.7 
+        image: 135808945423.dkr.ecr.us-east-1.amazonaws.com/skyebank:v2.8 
         ports:
         - containerPort: 8080
         resources:
