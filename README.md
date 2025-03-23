@@ -133,13 +133,27 @@ kubectl create secret docker-registry ecr-registry-secret \
 
 
 ### 6. Configure GitHub Actions
-Update **secrets** in GitHub repository settings:
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `ECR_REPOSITORY`
+1- Create a new self runner  folw the below steps:
+**From Settings> action > runners**
+![image](https://github.com/user-attachments/assets/51064f07-09cb-4d1e-9d7d-aa2a4714057a)
+
+![image](https://github.com/user-attachments/assets/b9d69e84-b37d-4a93-882d-5bd11ad3e52f)
+
+![image](https://github.com/user-attachments/assets/adb8f41d-ba5c-48e1-a089-8fa508183a8f)
+
+![image](https://github.com/user-attachments/assets/d7b37f19-e253-4ef7-bb5b-a489a1a4cea5)
+
+2- Update **secrets** in GitHub repository settings:
+  - `AWS_ACCESS_KEY_ID`
+  - `AWS_SECRET_ACCESS_KEY`
+  - `AWS_REGION`
+  - `ECR_REPOSITORY`
+  - 
+![image](https://github.com/user-attachments/assets/eb153260-5853-4cb6-94a7-383eacf8277b)
 
 
-### 6. Trigger CI/CD Pipeline
+
+### 7. Trigger CI/CD Pipeline
 Push changes to GitHub and let GitHub Actions handle the deployment:
 ```bash
 git add .
