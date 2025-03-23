@@ -189,7 +189,7 @@ k create -f argocd-app-of-apps.yaml
 
 ![image](https://github.com/user-attachments/assets/bcd4961c-7a2f-4de7-9591-524df69df139)
 
-## Monitoring and Observability
+## 10. Monitoring and Observability
 After deployment, access Prometheus and Grafana:
 - **Prometheus**: `http://<load-balancer-ip>:9090`
 - **Grafana**: `http://<load-balancer-ip>:3000` (Default Username Login: admin)
@@ -211,6 +211,9 @@ kubectl get secret prometheus-grafana -n prometheus -o jsonpath="{.data.admin-pa
 
 ![image](https://github.com/user-attachments/assets/a389239d-e751-4f0c-ba6b-bd9ca662afcf)
 
+## 11. Access the Application Ingress Service
+
+![image](https://github.com/user-attachments/assets/f4ca16a6-aaf9-4df5-88d1-a3d9f036e7eb)
 
 ## Cleanup
 To remove all deployed resources:
