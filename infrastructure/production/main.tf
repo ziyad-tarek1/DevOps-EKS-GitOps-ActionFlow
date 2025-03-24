@@ -141,7 +141,7 @@ module "argocd" {
 
 module "ecr_repo" {
   source       = "../module/ecr"
-  ecr_name     = "my-ecr-repo"
+  ecr_name     = "skyebank"
   scan_on_push = true
 }
 
